@@ -1,0 +1,23 @@
+name: syncToGitee
+'on':
+  push:
+    branches:
+      - gh-pages
+jobs:
+  repo-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync to Gitee
+        uses: wearerequired/git-mirror-action@master
+        env:
+          SSH_PRIVATE_KEY: '${{ secrets.GITEE_PRIVATE_KEY }}'
+        with:
+          source-repo: 'git@github.com:joyholmes/joyholmes-web-blog.git'
+          destination-repo: 'git@gitee.com:JoyHolmes/joyholmes-web-blog.git'
+      - name: Build Gitee Pages
+        uses: yanglbme/gitee-pages-action@main
+        with:
+          gitee-username: JoyHolmes
+          gitee-password: '${{ secrets.GITEE_PASSWORD }}'
+          gitee-repo: JoyHolmes/joyholmes-web-blog
+          branch: gh-pages
